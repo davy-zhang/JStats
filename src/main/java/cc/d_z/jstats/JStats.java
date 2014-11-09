@@ -15,7 +15,7 @@ import com.google.gson.Gson;
  *         email: davy@d-z.cc<br>
  *         <a href="http://d-z.cc">d-z.cc</a><br>
  */
-public class JStats implements Serializable{
+public class JStats implements Serializable {
 
 	private static final long serialVersionUID = 4286362397612396589L;
 	private static final ConcurrentHashMap<String, Counter> COUNTER_MAP = new ConcurrentHashMap<String, Counter>();
@@ -23,13 +23,14 @@ public class JStats implements Serializable{
 	private static final ConcurrentHashMap<String, Metric> METRIC_MAP = new ConcurrentHashMap<String, Metric>();
 
 	public static long incr(String name, long value) {
-		Counter counter = COUNTER_MAP.get(name);
-		if (counter == null) {
-			COUNTER_MAP.put(name, new Counter(value));
-			return value;
-		} else {
-			return counter.incr(value);
+		if (!COUNTER_MAP.containsKey(name)) {
+			Counter counter = COUNTER_MAP.putIfAbsent(name, new Counter(value));
+			if (counter == null) {
+				return value;
+			}
 		}
+		Counter counter = COUNTER_MAP.get(name);
+		return counter.incr(value);
 	}
 
 	public static long incr(String name) {
@@ -69,7 +70,10 @@ public class JStats implements Serializable{
 	public static void metric(String name, long value) {
 		Metric metric = METRIC_MAP.get(name);
 		if (metric == null) {
-			METRIC_MAP.put(name, new Metric(value));
+			Metric metricValue = METRIC_MAP.putIfAbsent(name, new Metric(value));
+			if (metricValue != null) {
+				metricValue.metric(value);
+			}
 		} else {
 			metric.metric(value);
 		}
@@ -80,7 +84,10 @@ public class JStats implements Serializable{
 		if (metric == null) {
 			metric = new TimeMetric();
 			metric.metric(runnable, isNano);
-			METRIC_MAP.put(name, metric);
+			TimeMetric metricValue = (TimeMetric) METRIC_MAP.putIfAbsent(name, metric);
+			if (metricValue != null) {
+				metricValue.metric(runnable, isNano);
+			}
 		} else {
 			metric.metric(runnable, isNano);
 		}
@@ -104,7 +111,10 @@ public class JStats implements Serializable{
 		if (metric == null) {
 			metric = new TimeMetric();
 			t = metric.metric(callable, isNano);
-			METRIC_MAP.put(name, metric);
+			TimeMetric metricValue = (TimeMetric) METRIC_MAP.putIfAbsent(name, metric);
+			if (metricValue != null) {
+				t = metricValue.metric(callable, isNano);
+			}
 		} else {
 			t = metric.metric(callable, isNano);
 		}

@@ -1,6 +1,10 @@
 package cc.d_z.jstats.test;
 
 import java.util.concurrent.Callable;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -47,9 +51,9 @@ public class JStatsTest {
 		JStats.gauge("c", 2);
 		Assert.assertTrue(JStats.<Integer> getGauge("c").get() == 2);
 	}
-	
+
 	@Test
-	public void testGaugeSpeed(){
+	public void testGaugeSpeed() {
 		long num = 100000000L;
 		for (long i = 1; i <= num; i++) {
 			JStats.metric("gaugeUseTime", new Runnable() {
@@ -85,5 +89,67 @@ public class JStatsTest {
 		JStats.metric("e", 5);
 		String json = JStats.toJson();
 		System.out.println(json);
+	}
+
+	@Test
+	public void testIncr2() {
+		ExecutorService pool = Executors.newFixedThreadPool(8);
+		final CountDownLatch latch = new CountDownLatch(1);
+		int all = 10;
+		for (int i = 0; i < all; i++) {
+			pool.execute(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						latch.await();
+						for (int i = 0; i < 1000; i++) {
+							JStats.incr("a");
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		latch.countDown();
+		pool.shutdown();
+		try {
+			pool.awaitTermination(1, TimeUnit.DAYS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println(JStats.toJson());
+	}
+
+	@Test
+	public void testMetric() {
+		ExecutorService pool = Executors.newFixedThreadPool(8);
+		final CountDownLatch latch = new CountDownLatch(1);
+		int all = 10;
+		for (int i = 0; i < all; i++) {
+			pool.execute(new Runnable() {
+
+				@Override
+				public void run() {
+					try {
+						latch.await();
+						for (int i = 0; i < 1000; i++) {
+							JStats.metric("a",1);
+						}
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+		}
+		latch.countDown();
+		pool.shutdown();
+		try {
+			pool.awaitTermination(1, TimeUnit.DAYS);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		System.out.println(JStats.toJson());
 	}
 }
