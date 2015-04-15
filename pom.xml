@@ -1,132 +1,98 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>cc.d-z.jstats</groupId>
-	<artifactId>jstats</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
-	<packaging>jar</packaging>
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.talkingdata</groupId>
+        <artifactId>centralized-configuration</artifactId>
+        <version>0.0.1</version>
+    </parent>
+    <groupId>cc.d-z.jstats</groupId>
+    <artifactId>jstats</artifactId>
+    <version>0.0.5-SNAPSHOT</version>
+    <packaging>jar</packaging>
 
 
-	<inceptionYear>2014</inceptionYear>
-	<description>
+    <inceptionYear>2014</inceptionYear>
+    <description>
         Java内存状态监控
     </description>
 
-	<url>https://github.com/davy-zhang/JStats</url>
+    <url>https://github.com/davy-zhang/JStats</url>
 
 
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
 
 
-	<developers>
-		<developer>
-			<name>Davy Zhang</name>
-			<id>davy</id>
-			<email>davy@d-z.cc</email>
-			<organization />
-			<roles>
-				<role>Java Developer</role>
-			</roles>
-			<timezone>+8</timezone>
-		</developer>
+    <developers>
+        <developer>
+            <name>Davy Zhang</name>
+            <id>davy</id>
+            <email>davy@d-z.cc</email>
+            <organization/>
+            <roles>
+                <role>Java Developer</role>
+            </roles>
+            <timezone>+8</timezone>
+        </developer>
 
-	</developers>
-	<contributors>
-		<contributor>
-			<name>Davy Zhang</name>
-		</contributor>
-	</contributors>
+    </developers>
+    <contributors>
+        <contributor>
+            <name>Davy Zhang</name>
+        </contributor>
+    </contributors>
 
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.9</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<version>2.2.4</version>
-		</dependency>
-		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
-			<scope>provided</scope>
-		</dependency>
-	</dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.9</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.2.4</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>2.5</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.source>1.6</maven.compiler.source>
-		<maven.compiler.target>1.6</maven.compiler.target>
-	</properties>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<source>1.6</source>
-					<target>1.6</target>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.6</version>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-release-plugin</artifactId>
-				<configuration>
-					<tagBase>https://github.com/davy-zhang/JStats/tags</tagBase>
-					<autoVersionSubmodules>true</autoVersionSubmodules>
-					<releaseProfiles>release</releaseProfiles>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
+    <properties>
+        <git_project>JStats</git_project>
+    </properties>
 
-	<repositories>
-		<repository>
-			<id>clojars.org</id>
-			<url>http://clojars.org/repo</url>
-		</repository>
-	</repositories>
+    <repositories>
+        <repository>
+            <id>clojars.org</id>
+            <url>http://clojars.org/repo</url>
+        </repository>
+    </repositories>
 
-	<scm>
-		<connection>scm:git:https://github.com/davy-zhang/JStats.git</connection>
-		<developerConnection>scm:git:https://github.com/davy-zhang/JStats.git</developerConnection>
-		<url>https://github.com/davy-zhang/JStats.git</url>
-		<tag>jstats-0.0.1</tag>
-	</scm>
+    <scm>
+        <connection>scm:git:https://github.com/davy-zhang/JStats.git</connection>
+        <developerConnection>scm:git:https://github.com/davy-zhang/JStats.git</developerConnection>
+        <url>https://github.com/davy-zhang/JStats.git</url>
+    </scm>
 
-	<distributionManagement>
-		<repository>
-			<id>sonatype-nexus-staging</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-		</repository>
+    <distributionManagement>
+        <repository>
+            <id>sonatype-nexus-staging</id>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
 
-		<snapshotRepository>
-			<id>sonatype-nexus-snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
+        <snapshotRepository>
+            <id>sonatype-nexus-snapshots</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>
