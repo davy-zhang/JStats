@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import javax.management.MBeanServer;
 import javax.management.ObjectName;
+import java.io.IOException;
 import java.io.Serializable;
 import java.lang.management.ManagementFactory;
 import java.util.HashMap;
@@ -21,9 +22,9 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JStats implements Serializable {
 
     private static final long serialVersionUID = 4286362397612396589L;
-    static final ConcurrentHashMap<String, Counter> COUNTER_MAP = new ConcurrentHashMap<String, Counter>();
-    static final ConcurrentHashMap<String, Gauge> GAUGE_MAP = new ConcurrentHashMap<String, Gauge>();
-    static final ConcurrentHashMap<String, Metric> METRIC_MAP = new ConcurrentHashMap<String, Metric>();
+    protected static final ConcurrentHashMap<String, Counter> COUNTER_MAP = new ConcurrentHashMap<String, Counter>();
+    protected static final ConcurrentHashMap<String, Gauge> GAUGE_MAP = new ConcurrentHashMap<String, Gauge>();
+    protected static final ConcurrentHashMap<String, Metric> METRIC_MAP = new ConcurrentHashMap<String, Metric>();
 
     static {
         try {
@@ -173,5 +174,27 @@ public class JStats implements Serializable {
         map.put("gauges", gaugeMap);
         map.put("metrics", metricMap);
         return new Gson().toJson(map);
+    }
+
+    public static void clear() {
+        clearCounters();
+        clearGauges();
+        clearMetrics();
+    }
+
+    public static void clearCounters() {
+        COUNTER_MAP.clear();
+    }
+
+    public static void clearGauges() {
+        GAUGE_MAP.clear();
+    }
+
+    public static void clearMetrics() {
+        METRIC_MAP.clear();
+    }
+
+    public static void openSocketOutput(int port) throws IOException {
+        SocketOutput.open(port);
     }
 }
