@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DecimalFormat;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -148,7 +149,7 @@ public class SocketOutput {
         for (String key : metrics.keySet()) {
             out.println("metric." + key + ".sum:" + metrics.get(key).getSum());
             out.println("metric." + key + ".count:" + metrics.get(key).getCount());
-            out.println("metric." + key + ".avg:" + metrics.get(key).getAvg());
+            out.println("metric." + key + ".avg:" + new DecimalFormat("#.00").format(metrics.get(key).getAvg()));
             out.println("metric." + key + ".max:" + metrics.get(key).getMax());
             out.println("metric." + key + ".min:" + metrics.get(key).getMin());
         }
