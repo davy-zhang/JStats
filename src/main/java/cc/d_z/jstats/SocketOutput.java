@@ -7,6 +7,7 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -21,19 +22,14 @@ public class SocketOutput {
     private static ServerSocket server;
     private static final AtomicBoolean opened = new AtomicBoolean();
 
-    static {
-        Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (server != null) {
-                    try {
-                        server.close();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
+    public static void shutDown() {
+        if (server != null) {
+            try {
+                server.close();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-        }));
+        }
     }
 
     public enum Cammand {
@@ -74,7 +70,15 @@ public class SocketOutput {
                 showMetric(out);
                 showEnd(out);
             }
+        }, ShowDelta("delta") {
+            @Override
+            public void execute(PrintStream out) throws InterruptedException {
+                showStart(out);
+                showDelta(out);
+                showEnd(out);
+            }
         };
+
 
         private String cammand;
 
@@ -92,7 +96,7 @@ public class SocketOutput {
             return Help;
         }
 
-        public abstract void execute(PrintStream out);
+        public abstract void execute(PrintStream out) throws Exception;
     }
 
     public static void open(final int port) throws IOException {
@@ -152,6 +156,25 @@ public class SocketOutput {
             out.println("metric." + key + ".avg:" + new DecimalFormat("#.00").format(metrics.get(key).getAvg()));
             out.println("metric." + key + ".max:" + metrics.get(key).getMax());
             out.println("metric." + key + ".min:" + metrics.get(key).getMin());
+        }
+    }
+
+
+    public static void showDelta(PrintStream out) throws InterruptedException {
+        Map<String, Counter> counters = JStats.getCounters();
+        Map<String, Long> old = new HashMap<String, Long>();
+        Map<String, Long> _new = new HashMap<String, Long>();
+        for (String key : counters.keySet()) {
+            old.put(key, counters.get(key).get());
+        }
+        Thread.sleep(1000L);
+        for (String key : counters.keySet()) {
+            _new.put(key, counters.get(key).get());
+        }
+        for (String key : _new.keySet()) {
+            long newValue = _new.get(key);
+            long oldValue = old.get(key);
+            out.println("counter." + key + ":" + newValue + ":" + (newValue - oldValue));
         }
     }
 }

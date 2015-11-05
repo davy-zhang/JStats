@@ -176,7 +176,7 @@ public class JStatsTest {
             JStats.incr("test");
             JStats.gauge("test", "a");
             JStats.metric("test", 10);
-            Thread.sleep(1000L);
+            Thread.sleep(100L);
         }
     }
 
