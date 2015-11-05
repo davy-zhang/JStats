@@ -82,8 +82,8 @@ public class JStats implements Serializable {
         return GAUGE_MAP.get(name);
     }
 
-    public static <T> Map<String, Gauge<T>> getGauges() {
-        return new HashMap<String, Gauge<T>>(GAUGE_MAP);
+    public static Map<String, Gauge> getGauges() {
+        return getNewMap(GAUGE_MAP);
     }
 
     public static void metric(String name, long value) {
